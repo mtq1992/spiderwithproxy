@@ -10,8 +10,8 @@ reload(sys)
 sys.stdin,sys.stdout,sys.stderr=stdi,stdo,stde
 sys.setdefaultencoding('utf-8')
 
-f = open("./src/proxy.txt")
-lines = f.readlines()
+proxyfile = open("./src/proxy.txt")
+lines = proxyfile.readlines()
 def proxy():
     i = random.randint(1, len(lines))
     ip = lines[i].strip("\n").split("\t")
@@ -26,10 +26,10 @@ def baidu(num):
                    'User-Agent':'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0) QQBrowser/8.2.4257.400'
                    }
         requ = urllib2.Request(url,headers=headers)
-        #proxy_get = proxy()
-        #print proxy_get
-        requ.set_proxy('218.106.205.145:8080','http')
-        req = urllib2.urlopen(requ,timeout=5)
+        proxy_get = proxy()
+        print proxy_get
+        requ.set_proxy(proxy_get,'http')
+        req = urllib2.urlopen(requ,timeout=30)
         res = req.read()
         doc = HTML.document_fromstring(res)
         c = doc.xpath("//*[@id='1']/div[1]/div[1]/div[2]/div[2]/span[2]")
@@ -56,16 +56,16 @@ def baidu(num):
         print num +"----------except"
         return ''
 
-inFile = open("20160607.txt",'r')
-outFile = open("baidu-output.txt",'w')
-errFile = open("baidu-error.txt",'w')
+inFile = open("./input/20160607.txt",'r')
+outFile = open("./output/baidu-output.txt",'w')
+errFile = open("./output/baidu-error.txt",'w')
 
 print(time.ctime())
 outFile.write(time.ctime() + '\n')
 for line in inFile.readlines():
     line = line.replace('\n','')
-    #rdom = random.randint(1,5)
-    #time.sleep(rdom)
+    rdom = random.randint(1,5)
+    time.sleep(rdom)
     tv = baidu(line)
     if len(tv)>0:
         outFile.write(str(tv) + '\n')
